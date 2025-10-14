@@ -1,0 +1,452 @@
+/* --- Root Variables and Soft Mid-Tone Theme Setup --- */
+:root {
+    --primary-accent: #3498db; /* Muted Blue (Professional Accent) */
+    --main-bg: #e9eff5; /* Very Light Blue-Gray Background */
+    --card-bg: #ffffff; /* White Card/Panel Background */
+    --text-color: #2c3e50; /* Rich Slate Gray Text */
+    --sub-text-color: #7f8c8d; /* Muted Gray Sub-Text */
+    --border-light: #c8d1da; /* Soft Light Blue Borders */
+    --shadow-soft: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    --transition-speed: 0.3s;
+    /* Suggestions Orange is kept for warnings/alerts */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: var(--main-bg); /* Soft Blue-Gray background */
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* --- Top Bar (Header) Styling --- */
+.top-bar {
+    background-color: var(--card-bg); /* White header background */
+    border-bottom: 3px solid var(--primary-accent);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.top-bar h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.top-bar h1 strong {
+    color: var(--primary-accent);
+}
+
+.hackathon-info {
+    font-size: 14px;
+    color: var(--sub-text-color);
+    font-weight: 400;
+}
+
+/* --- Main Layout: FLEXBOX (STABLE SIDE-BY-SIDE FIX) --- */
+.main-content-grid {
+    display: flex; /* Use Flexbox to guarantee side-by-side layout */
+    gap: 30px;
+    max-width: 1400px;
+    /* Removed margin: auto to prevent the container from floating/centering/collapsing */
+    margin: 20px 20px 20px 20px; 
+    padding: 0;
+}
+
+/* --- Left Column: Input Panel --- */
+.input-panel {
+    flex: 0 0 500px; /* Fixes the width to 500px, preventing collapse */
+    max-width: 500px;
+    
+    background-color: var(--card-bg); /* White card background */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s; 
+}
+
+.panel-title {
+    color: var(--primary-accent);
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.panel-subtitle {
+    color: var(--sub-text-color);
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+/* Form Sections */
+.form-group-card {
+    background-color: var(--main-bg); /* Soft background for form cards */
+    padding: 20px;
+    margin-bottom: 15px; 
+    border-radius: 8px;
+    border-left: 5px solid var(--primary-accent);
+}
+
+.form-group-card h3 {
+    color: var(--text-color);
+    margin-bottom: 15px;
+    font-size: 18px;
+    border-bottom: 1px dashed var(--border-light);
+    padding-bottom: 10px;
+}
+
+/* Input Fields Styling */
+input[type="text"], 
+input[type="email"], 
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px; 
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: var(--card-bg); /* White input background */
+    color: var(--text-color);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Custom styling for the image file input (making it look cleaner) */
+input[type="file"] {
+    padding: 6px 0;
+    margin-bottom: 15px; 
+}
+input[type="file"]::file-selector-button {
+    background-color: var(--primary-accent);
+    color: var(--card-bg);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+input[type="file"]::file-selector-button:hover {
+    background-color: #2980b9; 
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--primary-accent);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5); /* Blue shadow */
+}
+/* Placeholder text color */
+::placeholder {
+    color: #999; 
+    opacity: 1; 
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Education/Experience Block separator and inline inputs */
+.input-block {
+    margin-bottom: 15px;
+    padding-top: 5px;
+}
+
+.input-inline {
+    display: flex;
+    gap: 10px;
+}
+.input-inline input {
+    flex: 1;
+}
+
+/* --- Buttons --- */
+.submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-accent);
+    color: var(--card-bg); /* White text on blue button */
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    margin-top: 30px;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.submit-btn:hover {
+    background-color: #2980b9; /* Darker Blue */
+}
+
+.submit-icon {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.add-btn {
+    background: none;
+    border: 1px solid var(--primary-accent);
+    color: var(--primary-accent);
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 5px;
+    font-size: 14px;
+    display: block; 
+    margin-bottom: 10px;
+}
+
+.add-btn:hover {
+    background-color: var(--primary-accent);
+    color: var(--card-bg);
+}
+
+
+/* --- Right Column: Output Panel (Preview) --- */
+.output-panel {
+    flex: 1; 
+
+    background-color: var(--card-bg); 
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+    position: sticky; 
+    top: 20px;
+    transition: all 0.3s; 
+}
+
+/* Base style for the box containing the final resume */
+.resume-preview-box {
+    background-color: var(--card-bg); /* White interior background */
+    border: 1px solid var(--border-light);
+    min-height: 400px;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: auto; 
+    color: var(--text-color);
+}
+
+/* ========================================= */
+/* --- RESUME HEADER STYLING (John Doe Fix) --- */
+/* ========================================= */
+.resume-header {
+    /* Main container for Name/Contact/Image */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 25px; 
+    padding-bottom: 15px; 
+}
+
+.resume-header .header-content {
+    /* Ensures this block takes space and aligns text */
+    flex-grow: 1;
+    text-align: left;
+    padding-right: 30px; 
+}
+
+.resume-name {
+    font-size: 28px; 
+    font-weight: 700;
+    color: var(--text-color); 
+    margin-bottom: 2px; /* FIX: Space between Name and Contact Info */
+    display: block; 
+    /* Ensures name is not wrapped up with contact info */
+    line-height: 1.1; 
+}
+
+.contact-info {
+    font-size: 13px;
+    color: var(--sub-text-color); 
+    margin-top: 5px; 
+    margin-bottom: 10px; /* Creates vertical space between contact info and the summary line */
+    display: block;
+}
+
+.contact-info span {
+    margin: 0 5px; 
+}
+
+.header-line {
+    /* This line separates the contact header from the summary */
+    border: none;
+    border-top: 2px solid var(--text-color); 
+    margin-top: 15px; 
+    width: 100%; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile-pic {
+    width: 100px; 
+    height: 100px;
+    border-radius: 50%; 
+    object-fit: cover; 
+    border: 3px solid var(--primary-accent);
+    margin-left: 20px;
+    flex-shrink: 0; 
+}
+
+/* ========================================= */
+/* --- VISUAL FIX: HTML Tag Styling (Used by JS) --- */
+/* ========================================= */
+
+/* Style for Main H2 Section Headings (e.g., Professional Summary) */
+.resume-preview-box h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-accent); 
+    margin-top: 25px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--primary-accent);
+}
+
+/* Style for Bold/Strong text (like dates, companies, sub-titles) */
+.resume-preview-box strong {
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+/* Style for Lists (Bullet Points) */
+.resume-preview-box ul {
+    list-style-type: disc;
+    padding-left: 30px; 
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+.resume-preview-box ul li {
+    margin-bottom: 4px;
+}
+
+/* Suggestions Box Styling */
+.suggestion-box {
+    padding: 15px;
+    border: 2px dashed #ff9800; /* Orange Accent */
+    border-radius: 8px;
+    background-color: var(--main-bg); /* Soft background for suggestion box */
+    color: var(--text-color);
+}
+
+.suggestion-box h3 {
+    color: #ff9800;
+    margin-bottom: 10px;
+}
+
+/* Ensure suggestions strong tags are also styled */
+.suggestion-box strong {
+    color: #ff9800;
+}
+
+.placeholder-text {
+    color: var(--sub-text-color);
+    text-align: center;
+    margin-top: 100px;
+    font-style: italic;
+    font-size: 16px;
+}
+.placeholder-text-small {
+    color: var(--sub-text-color);
+    font-style: italic;
+    font-size: 13px;
+}
+
+/* ========================================= */
+/* --- CRITICAL: PRINT STYLES FOR CLEAN PDF --- */
+/* ========================================= */
+@media print {
+    /* HIDE all navigation, inputs, and buttons */
+    .top-bar, 
+    .input-panel, 
+    .output-panel .panel-title, 
+    .output-panel .panel-subtitle,
+    #print-resume-btn,
+    .suggestion-box {
+        display: none !important;
+    }
+
+    /* Target the body and the HTML structure */
+    body {
+        /* Force the background to white for the page */
+        background-color: white !important;
+        /* Force the text color back to black for printing */
+        color: black !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Force the entire content area to the top/left for clean printing */
+    .main-content-grid {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Style the actual resume box for the final output */
+    .resume-preview-box {
+        /* Remove the box, background, and borders */
+        background-color: white !important;
+        border: none !important;
+        box-shadow: none !important;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        page-break-inside: avoid;
+    }
+
+    /* Print styling on elements (Must be black for print) */
+    .resume-preview-box h2, .resume-preview-box strong, .resume-preview-box {
+        color: black !important;
+    }
+    
+    .resume-preview-box h2 {
+        border-color: black !important; /* Ensure underlines are black */
+    }
+
+    /* Print styling for the custom header */
+    .resume-header .resume-name, 
+    .resume-header .contact-info,
+    .resume-header .header-line,
+    .resume-header .profile-pic {
+        color: black !important;
+        border-color: black !important;
+    }
+}
+
+
+/* --- Responsive Design (Mobile View) --- */
+@media (max-width: 900px) {
+    .main-content-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 15px;
+    }
+
+    .input-panel {
+        max-width: 100%;
+        flex: auto;
+    }
+
+    .output-panel {
+        position: static;
+    }
+}

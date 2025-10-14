@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "balmy-flash-475019-c2",
+  "private_key_id": "82fd13dcf6d78ea15d250ae4a77aaa70058ec515",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCthTY3sn8w+Ux3\ncOMmEZhNE6zjWk3BmMQiu/g8nevto3pk9V4llN5ueFtbpW7k7cdqua2GZA24PahT\njqf7C1UXsDmMPrjmlCFVKP6JKjtILEWs+U5byyIWF8G2estmOY/F+yFzhCEL1Haq\naEwpKNf7zht1qWovDmpt2awUStItKqjvjYTASpTOPXx2//H8w1k+Ijv/Af+0DJDF\nGluUUKbteFi/BJvg/ad5vem/opP481pQv1RfK6inUO/d9vZyBFQrsuL6QGESFhYE\n+ZwhOmgAz2MiGQxZ/AwNua09uwmC/zwXHyAGseETtMR+MTTKal0RBylyg/82k92P\n4t+gauNPAgMBAAECggEAA97y5K8wszD8ibWU+6Zs1VtZAgFjtqvnxDaZRRDo0HZT\nJqlqnkAB7kj1EMhR/v1m83SM8HCO9cs6VBLcoHcSQOMHhZ9olIw9ah7t/rVYeTWz\noDY3j0iqy/9frOh0XSVvlaUSi/conZDxzL9i45ArsUxZxHgxDDewHB88/X7lzWga\nz7VoynNBv0pg1E6cAyQyZ0N1aDwlbPekNuXiMhyXiB9FPKsewTz+l67xfvFA6wXQ\nEUNUM2GxdXoEFwDEqtQI38QVMNgQLOlYDYc5nmSR5m+mrrhmfnMmG82hEvDfAlI5\nSh7gVYT4oD74oP55SjN3/tU94lOBgC+lhlUdHbbcIQKBgQDauYczeVgjfcklnVNo\nrdSgG2AUxIy/YU7bfRr9SuD4WLh0WYXk1AzJz7vFlHcQTa2tDl7rkP3xHjKWIPAb\naO9m+h6iz8tID/GhoPUk5U3A+YESxmKIvcLMj8C+pIzxGSRVJqF+FdWF3wVoFFBo\nTa5bWBk9kl97vjHRUCjXLvNFVwKBgQDLF4Snc8PUrTyiuY2pkiKiHeE0PVZ+HVKw\nSK5Hhjvp/auxRvbvuJXXl4dc7AB2qb5Og/h+CyIDU0dmhH5VU+caDgpz1Xz5Ubkf\nfQIp59eWvjENDcccgEUOpZdr3zsPzL9N1uWQXH7TdpgYITFL2AFQHZJka/s4OuVs\n6MOVx/jeyQKBgG23wW19wkvTblJzEAMjp9RExzbDvcLG4lLR9/b1V9LcVnLu8W5v\nPJcDoLKlHfDMtoFoAw9x5SDNwBx1G1z0j5r9ft63E8brUI9+eVpvuEhEII41e/oS\nDqSku9AmJRlQPlyEi1//PePwkvq5rfgUd5EUqVysjz84ki7oYgRHZfrzAoGBAJtg\nC8n8pDbiroAkC4BO4BY9W90WjESB9JAPmt33kYDr5N4E18kA5AqD0DjECXq/VGxH\nROZRaB05KmgBN5HaVfU2BsMl8q3f2wx/HBepWuPl8Cr3fnyMmcih4V3S9CGbWESa\nAxlV2mW31panVkqbIC4F4cjYX+NeE8YlsfS2f+0ZAoGAPqxb5xRhVGh80k4f1mhW\nAh6vRCe7JaNqkgLh1/gDJsApoDbcSzrNin8vlbRmAKCvOHhEdB/joM9OEuzG6+MG\npZXto2i8z6ZMXgyBZZuzY94e+seUERvZgXVETRW9z93NYJXo/cvyVpolMfyMfLVu\nnqq90e7R5Pme+bRGWXUFf3g=\n-----END PRIVATE KEY-----\n",
+  "client_email": "ai-resume-builder@balmy-flash-475019-c2.iam.gserviceaccount.com",
+  "client_id": "112768199806881180708",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ai-resume-builder%40balmy-flash-475019-c2.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

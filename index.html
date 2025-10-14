@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Resume Builder | Coderush</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="top-bar">
+      <h1>AI Resume Builder</h1>
+      <div class="hackathon-info">Coderush 11.0 Project</div>
+    </header>
+
+    <div class="main-content-grid">
+      <div class="input-panel">
+        <h2 class="panel-title">1. Enter Your Details</h2>
+        <p class="panel-subtitle">
+          This information will be used by the AI to structure your resume.
+        </p>
+
+        <form id="resumeForm">
+          <section class="form-group-card">
+            <h3>Personal Details</h3>
+            <input type="text" id="name" placeholder="Full Name" required />
+            <input
+              type="email"
+              id="email"
+              placeholder="Email Address"
+              required
+            />
+            <input
+              type="text"
+              id="phone"
+              placeholder="Phone Number / Address"
+            />
+
+            <!-- NEW IMAGE INPUT -->
+            <label for="profile-pic-file" class="file-label">
+                Upload Profile Picture (Optional)
+            </label>
+            <input type="file" id="profile-pic-file" accept="image/*">
+            <!-- END NEW IMAGE INPUT -->
+
+            <textarea
+              id="summary"
+              placeholder="Professional Summary/Objective (2-3 lines for the AI to start with)"
+            ></textarea>
+          </section>
+
+          <section class="form-group-card" id="education-section">
+            <h3>Education</h3>
+            <div class="education-block input-block">
+              <input
+                type="text"
+                class="degree"
+                placeholder="Degree/Course (e.g., B.Tech in CSE)"
+              />
+              <input
+                type="text"
+                class="institution"
+                placeholder="Institution Name (e.g., Bal Bharati Public School)"
+              />
+              <div class="input-inline">
+                <input type="text" class="start-date" placeholder="Start Date" />
+                <input type="text" class="end-date" placeholder="End Date/Current" />
+              </div>
+            </div>
+            <button
+              type="button"
+              class="add-btn"
+              onclick="addBlock('education')"
+            >
+              + Add Education
+            </button>
+          </section>
+
+          <section class="form-group-card" id="experience-section">
+            <h3>Work Experience / Projects</h3>
+            <div class="experience-block input-block">
+              <input type="text" class="job-title" placeholder="Job Title / Project Name" />
+              <input type="text" class="company" placeholder="Company / Organization Name" />
+              <div class="input-inline">
+                <input type="text" class="start-date" placeholder="Start Date" />
+                <input type="text" class="end-date" placeholder="End Date/Current" />
+              </div>
+              <textarea
+                class="responsibilities"
+                placeholder="Key responsibilities and achievements (short points)."
+              ></textarea>
+            </div>
+            <button
+              type="button"
+              class="add-btn"
+              onclick="addBlock('experience')"
+            >
+              + Add Experience
+            </button>
+          </section>
+
+          <section class="form-group-card">
+            <h3>Core Skills</h3>
+            <textarea
+              id="skills"
+              placeholder="HTML, CSS, JavaScript, Problem Solving, Leadership, etc. (Separate by comma)"
+            ></textarea>
+          </section>
+
+          <button type="submit" class="submit-btn">
+            <span class="submit-icon">✨</span> Generate AI Resume & Suggestions
+          </button>
+        </form>
+      </div>
+
+      <div class="output-panel">
+        <h2 class="panel-title">2. AI Resume Preview & Suggestions</h2>
+        <p class="panel-subtitle">
+          Your final resume and AI-powered suggestions will appear here.
+        </p>
+
+        <div id="ai-output" class="resume-preview-box">
+          <p class="placeholder-text">
+            Fill out the form on the left and click **'Generate'** to see the
+            magic happen!
+          </p>
+          <div class="loading-animation" style="display: none">
+            Loading AI...
+          </div>
+        </div>
+
+        <div class="suggestion-box">
+          <h3>AI Suggestions:</h3>
+          <p class="placeholder-text-small">
+            The AI will also suggest improvements (e.g., adding metrics, missing
+            sections) here.
+          </p>
+        </div>
+        
+        <!-- PDF DOWNLOAD BUTTON (Now functions as Print-to-PDF) -->
+        <button id="print-resume-btn" class="submit-btn" onclick="window.print()" style="background-color: #FFA000; margin-top: 20px;">
+            <span class="submit-icon">🖨️</span> Print/Save Resume (PDF)
+        </button>
+        <!-- END PDF DOWNLOAD BUTTON -->
+      </div>
+    </div>
+    
+    <script>
+        // --- 1. Dynamic Block Addition Function (Corrected) ---
+        function addBlock(type) {
+            const container = document.getElementById(type + "-section");
+            const newBlock = document.createElement("div");
+            newBlock.className = type + "-block input-block";
+
+            if (type === "education") {
+                newBlock.innerHTML = `
+                    <input type="text" class="degree" placeholder="Degree/Course">
+                    <input type="text" class="institution" placeholder="Institution Name">
+                    <div class="input-inline">
+                        <input type="text" class="start-date" placeholder="Start Date">
+                        <input type="text" class="end-date" placeholder="End Date/Current">
+                    </div>
+                `;
+            } else if (type === "experience") {
+                newBlock.innerHTML = `
+                    <input type="text" class="job-title" placeholder="Job Title / Project Name">
+                    <input type="text" class="company" placeholder="Company / Organization Name">
+                    <div class="input-inline">
+                        <input type="text" class="start-date" placeholder="Start Date">
+                        <input type="text" class="end-date" placeholder="End Date/Current">
+                    </div>
+                    <textarea class="responsibilities" placeholder="Key responsibilities and achievements (short points)."></textarea>
+                `;
+            }
+            container.insertBefore(newBlock, container.querySelector(".add-btn"));
+        }
+
+        // --- 2. Core Form Submission Logic (Complete) ---
+        document
+            .getElementById("resumeForm")
+            .addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const form = e.target;
+                const data = {};
+                
+                // --- IMAGE HANDLING LOGIC ---
+                const imageFile = form.querySelector("#profile-pic-file").files[0];
+                let imageBase64 = '';
+
+                if (imageFile) {
+                    // This is an asynchronous operation, blocking execution until the file is read
+                    await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            imageBase64 = event.target.result;
+                            resolve();
+                        };
+                        reader.readAsDataURL(imageFile);
+                    });
+                }
+                data.profileImage = imageBase64;
+                // --- END IMAGE HANDLING ---
+
+
+                // A. Collect Static Fields
+                data.name = form.querySelector("#name").value;
+                data.email = form.querySelector("#email").value;
+                data.phone = form.querySelector("#phone").value;
+                data.summary = form.querySelector("#summary").value;
+                data.skills = form.querySelector("#skills").value;
+
+                // B. Collect Dynamic Education Blocks
+                data.education = [];
+                const eduBlocks = document.querySelectorAll(".education-block");
+                eduBlocks.forEach((block) => {
+                    data.education.push({
+                        degree: block.querySelector(".degree")?.value || "",
+                        institution: block.querySelector(".institution")?.value || "",
+                        start: block.querySelector(".start-date")?.value || "",
+                        end: block.querySelector(".end-date")?.value || "",
+                    });
+                });
+
+                // C. Collect Dynamic Experience Blocks
+                data.experience = [];
+                const expBlocks = document.querySelectorAll(".experience-block");
+                expBlocks.forEach((block) => {
+                    data.experience.push({
+                        title: block.querySelector(".job-title")?.value || "",
+                        company: block.querySelector(".company")?.value || "",
+                        start: block.querySelector(".start-date")?.value || "",
+                        end: block.querySelector(".end-date")?.value || "",
+                        responsibilities:
+                            block.querySelector(".responsibilities")?.value || "",
+                    });
+                });
+
+                // --- UI State Management ---
+                const submitBtn = document.querySelector(".submit-btn");
+                const outputBox = document.querySelector("#ai-output");
+                const suggestionBox = document.querySelector(".suggestion-box");
+                const loadingAnimation = document.querySelector(".loading-animation");
+                const originalButtonText = submitBtn.innerHTML;
+                const printBtn = document.getElementById('print-resume-btn');
+
+                // Show Loading State
+                submitBtn.textContent = "Processing... Please Wait...";
+                submitBtn.disabled = true;
+                outputBox.innerHTML = "";
+                suggestionBox.innerHTML = "<h3>AI Suggestions:</h3>";
+                loadingAnimation.style.display = "block";
+                
+                // Hide print button during generation
+                if (printBtn) { printBtn.style.display = 'none'; }
+
+
+                try {
+                    const response = await fetch("/generate-resume", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    });
+
+                    const result = await response.json();
+
+                    // 4. Handle the response from the server
+                    if (result.success) {
+                        
+                        // === FINAL DISPLAY FIX: CONVERT MESSY MARKDOWN TO CLEAN HTML ===
+                        let displayResume = result.resumeText;
+                        let displaySuggestions = result.suggestions;
+
+                        // 1. Convert all H2/## or H3/### titles to <h2> tags (for main sections)
+                        displayResume = displayResume.replace(/^#+\s*(.*)$/gm, '<h2>$1</h2>');
+                        
+                        // 2. Replace all remaining bold (**Text**) with <strong> tags
+                        displayResume = displayResume.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        
+                        // 3. Convert single asterisks (*) to <li> items
+                        displayResume = displayResume.replace(/^\s*[\*-]\s*(.*)$/gm, '<li>$1</li>');
+                        
+                        // 4. Wrap adjacent <li> items in <ul> for correct styling
+                        displayResume = displayResume.replace(/(<li>.*?<\/li>)+/sg, '<ul>$1</ul>');
+
+
+                        // Clean up suggestions box as well
+                        displaySuggestions = displaySuggestions.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        
+                        // Display the cleaned HTML
+                        outputBox.innerHTML = displayResume;
+                        suggestionBox.innerHTML = `<h3>AI Suggestions:</h3>${displaySuggestions}`;
+                        // =============================================================
+
+                    } else {
+                        // Handle server errors
+                        outputBox.innerHTML = `<p class="placeholder-text" style="color: red; margin-top: 15px;">Error: ${
+                            result.resumeText ||
+                            "Could not connect to the server or AI service."
+                        }</p>`;
+                    }
+                } catch (error) {
+                    console.error("Submission Error:", error);
+                    outputBox.innerHTML =
+                        '<p class="placeholder-text" style="color: red; margin-top: 15px;">Network Error: Is the server running on port 3000?</p>';
+                } finally {
+                    // RESET STATE
+                    submitBtn.innerHTML = originalButtonText;
+                    submitBtn.disabled = false;
+                    loadingAnimation.style.display = "none";
+                    if (printBtn) { printBtn.style.display = 'flex'; }
+                }
+            });
+    </script>
+  </body>
+</html>
