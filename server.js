@@ -8,11 +8,16 @@ const app = express();
 const PORT = 3000; 
 
 // Middleware Setup
-// Increased limit for body-parser to handle Base64 image data
+// Increased limit for body-parser to handle Base64 image data (up to 5MB)
 app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' })); 
 app.use(bodyParser.json({ limit: '5mb' }));
 
-// Serve static files (HTML, CSS, JS) from the current directory
+// 3. CRITICAL ROUTING FIX: Serve index.html for the root path
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Serve static files (CSS, images) from the current directory
 app.use(express.static(path.join(__dirname))); 
 
 // --- DATABASE OF SUGGESTIONS (FOR RANDOMIZATION) ---
@@ -31,9 +36,8 @@ const SUGGESTION_DATABASE = [
 // Function to select 3 unique, random suggestions
 function getRandomSuggestions() {
     const suggestions = [];
-    const pool = [...SUGGESTION_DATABASE]; // Copy the database
+    const pool = [...SUGGESTION_DATABASE]; 
 
-    // Select 3 random suggestions from the pool
     while (suggestions.length < 3 && pool.length > 0) {
         const randomIndex = Math.floor(Math.random() * pool.length);
         suggestions.push(pool.splice(randomIndex, 1)[0]);
@@ -43,24 +47,26 @@ function getRandomSuggestions() {
     return suggestions.join('<br><br>');
 }
 
-// 3. The Core Function: SIMULATE AI RESPONSE
+// The Core Function: SIMULATE AI RESPONSE
 function generateMockResume(formData) {
     
-    // --- CONDITIONAL CHECK FOR WORK EXPERIENCE ---
+    // --- CONDITIONAL CHECKS ---
     const hasWorkExperience = formData.experience.some(
         (exp) => exp.title || exp.company || exp.start || exp.end || exp.responsibilities
     );
+    const hasCertificates = formData.certificates.some(
+        (cert) => cert.name || cert.issuer || cert.image
+    );
     
-    // Default values if inputs are blank
+    // Default values
     const name = formData.name || 'Candidate Name';
     const email = formData.email || 'Email Missing';
     const phone = formData.phone || 'Phone Missing';
     const firstEducationDegree = formData.education[0]?.degree || 'High School / Pre-University';
     
-    // --- BUILD IMAGE CONTAINER (Conditional) ---
+    // --- BUILD IMAGE CONTAINER (Profile Picture) ---
     let imageElement = '';
     if (formData.profileImage) {
-        // Use the Base64 string directly as the image source (data URL)
         imageElement = `<img src="${formData.profileImage}" alt="Profile Picture" class="profile-pic">`;
     }
     
@@ -87,6 +93,38 @@ ${experienceContent.trim()}
         }
     }
     
+    // --- BUILD CERTIFICATES SECTION (Conditional) ---
+    let certificatesSection = '';
+
+    if (hasCertificates) {
+        let certContent = '';
+        formData.certificates.forEach(cert => {
+            if (cert.name) {
+                // Determine if there is an image for this specific certificate
+                const certImageHtml = cert.image 
+                    ? `<img src="${cert.image}" alt="${cert.name}" class="cert-badge">`
+                    : '';
+                    
+                certContent += `
+<div class="cert-entry">
+    ${certImageHtml}
+    <div class="cert-details">
+        **${cert.name || 'Certificate Name'}**
+        * Issuer: ${cert.issuer || 'N/A'} (Issued: ${cert.date || 'N/A'})
+    </div>
+</div>
+`;
+            }
+        });
+
+        if (certContent.trim()) {
+            certificatesSection = `
+## **Certifications & Awards**
+${certContent.trim()}
+`;
+        }
+    }
+
     // --- MOCK AI GENERATED CONTENT (Final Assembly) ---
     const mockResume = `
 <div class="resume-header">
@@ -100,12 +138,16 @@ ${experienceContent.trim()}
 </div>
 <hr class="header-line">
 
+## **Objective**
+${formData.targetJob || 'Seeking a challenging role to leverage technical skills in front-end development and gain professional experience.'}
+
 ## **Professional Summary**
 ${formData.summary || 'A highly adaptable and results-driven student, successfully developing a functional, full-stack application under hackathon constraints. Proficient in HTML, CSS, JavaScript, and Node.js for rapid prototyping.'}
 
 ## **Technical Skills**
 ${formData.skills || 'HTML, CSS, JavaScript (Node.js/Express), UI/UX Design, Problem-Solving, Team Collaboration'}
 ${experienceSection} 
+${certificatesSection} 
 ## **Education**
 **Degree:** ${firstEducationDegree}
 **Institution:** ${formData.education[0]?.institution || 'Bal Bharati Public School'}
@@ -122,7 +164,7 @@ ${experienceSection}
 }
 
 
-// 4. Define the Route to Handle Form Submission (The POST request)
+// Define the Route to Handle Form Submission (The POST request)
 app.post('/generate-resume', async (req, res) => {
     const formData = req.body;
     
@@ -140,8 +182,11 @@ app.post('/generate-resume', async (req, res) => {
 });
 
 
-// 5. Start the Server
+// Start the Server (Only for local testing)
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-    console.log(`Open your browser and navigate to http://localhost:${PORT}/index.html`);
+    console.log(`Open your browser and navigate to http://localhost:${PORT}`);
 });
+
+// Vercel Export: Important for Vercel Serverless Function deployment
+module.exports = app;

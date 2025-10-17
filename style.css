@@ -8,7 +8,17 @@
     --border-light: #c8d1da; /* Soft Light Blue Borders */
     --shadow-soft: 0 4px 8px rgba(0, 0, 0, 0.1); 
     --transition-speed: 0.3s;
-    /* Suggestions Orange is kept for warnings/alerts */
+}
+
+/* --- DARK THEME VARIABLE DEFINITIONS (CRITICAL) --- */
+[data-theme="dark"] {
+    --primary-accent: #5dade2; /* Lighter Blue for contrast in dark mode */
+    --main-bg: #1e1e1e; /* Deep Slate Gray/Dark Background */
+    --card-bg: #282828; /* Darker Card/Panel Background */
+    --text-color: #f0f0f0; /* Light Gray/White Text */
+    --sub-text-color: #aaaaaa; /* Lighter Gray Sub-Text */
+    --border-light: #444444; /* Dark Borders */
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.5); 
 }
 
 * {
@@ -19,14 +29,30 @@
 }
 
 body {
-    background-color: var(--main-bg); /* Soft Blue-Gray background */
+    background-color: var(--main-bg); 
     color: var(--text-color);
     line-height: 1.6;
 }
 
+/* --- Theme Toggle Button Styling --- */
+#theme-toggle {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 0 15px;
+    transition: transform 0.2s;
+    outline: none;
+    /* Ensure the icon color adapts to the current mode */
+    color: var(--text-color); 
+}
+#theme-toggle:hover {
+    transform: scale(1.1);
+}
+
 /* --- Top Bar (Header) Styling --- */
 .top-bar {
-    background-color: var(--card-bg); /* White header background */
+    background-color: var(--card-bg); 
     border-bottom: 3px solid var(--primary-accent);
     padding: 15px 30px;
     display: flex;
@@ -53,20 +79,19 @@ body {
 
 /* --- Main Layout: FLEXBOX (STABLE SIDE-BY-SIDE FIX) --- */
 .main-content-grid {
-    display: flex; /* Use Flexbox to guarantee side-by-side layout */
+    display: flex; 
     gap: 30px;
     max-width: 1400px;
-    /* Removed margin: auto to prevent the container from floating/centering/collapsing */
     margin: 20px 20px 20px 20px; 
     padding: 0;
 }
 
 /* --- Left Column: Input Panel --- */
 .input-panel {
-    flex: 0 0 500px; /* Fixes the width to 500px, preventing collapse */
+    flex: 0 0 500px; 
     max-width: 500px;
     
-    background-color: var(--card-bg); /* White card background */
+    background-color: var(--card-bg); 
     padding: 30px;
     border-radius: 12px;
     box-shadow: var(--shadow-soft);
@@ -87,7 +112,7 @@ body {
 
 /* Form Sections */
 .form-group-card {
-    background-color: var(--main-bg); /* Soft background for form cards */
+    background-color: var(--main-bg); 
     padding: 20px;
     margin-bottom: 15px; 
     border-radius: 8px;
@@ -112,15 +137,23 @@ textarea {
     border: 1px solid var(--border-light);
     border-radius: 6px;
     font-size: 15px;
-    background-color: var(--card-bg); /* White input background */
+    background-color: var(--card-bg); 
     color: var(--text-color);
     transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--primary-accent);
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-accent); 
 }
 
 /* Custom styling for the image file input (making it look cleaner) */
 input[type="file"] {
     padding: 6px 0;
     margin-bottom: 15px; 
+    color: transparent; /* Hides the default file input text */
 }
 input[type="file"]::file-selector-button {
     background-color: var(--primary-accent);
@@ -136,15 +169,18 @@ input[type="file"]::file-selector-button:hover {
     background-color: #2980b9; 
 }
 
-input:focus,
-textarea:focus {
-    border-color: var(--primary-accent);
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5); /* Blue shadow */
+/* File label for better UI */
+.file-label {
+    display: block;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
+
 /* Placeholder text color */
 ::placeholder {
-    color: #999; 
+    color: var(--sub-text-color); 
     opacity: 1; 
 }
 
@@ -218,7 +254,6 @@ textarea {
 /* --- Right Column: Output Panel (Preview) --- */
 .output-panel {
     flex: 1; 
-
     background-color: var(--card-bg); 
     padding: 30px;
     border-radius: 12px;
@@ -230,7 +265,7 @@ textarea {
 
 /* Base style for the box containing the final resume */
 .resume-preview-box {
-    background-color: var(--card-bg); /* White interior background */
+    background-color: var(--card-bg); 
     border: 1px solid var(--border-light);
     min-height: 400px;
     padding: 20px;
@@ -246,7 +281,6 @@ textarea {
 /* --- RESUME HEADER STYLING (John Doe Fix) --- */
 /* ========================================= */
 .resume-header {
-    /* Main container for Name/Contact/Image */
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -255,19 +289,17 @@ textarea {
 }
 
 .resume-header .header-content {
-    /* Ensures this block takes space and aligns text */
     flex-grow: 1;
     text-align: left;
     padding-right: 30px; 
 }
 
 .resume-name {
-    font-size: 28px; 
+    font-size: 32px; /* Increased size for name */
     font-weight: 700;
     color: var(--text-color); 
-    margin-bottom: 2px; /* FIX: Space between Name and Contact Info */
+    margin-bottom: 2px; 
     display: block; 
-    /* Ensures name is not wrapped up with contact info */
     line-height: 1.1; 
 }
 
@@ -275,7 +307,7 @@ textarea {
     font-size: 13px;
     color: var(--sub-text-color); 
     margin-top: 5px; 
-    margin-bottom: 10px; /* Creates vertical space between contact info and the summary line */
+    margin-bottom: 10px; 
     display: block;
 }
 
@@ -284,13 +316,10 @@ textarea {
 }
 
 .header-line {
-    /* This line separates the contact header from the summary */
     border: none;
     border-top: 2px solid var(--text-color); 
     margin-top: 15px; 
     width: 100%; 
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .profile-pic {
@@ -302,6 +331,35 @@ textarea {
     margin-left: 20px;
     flex-shrink: 0; 
 }
+
+/* --- Certificate Badge Styling --- */
+.cert-entry {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border-light);
+}
+
+.cert-badge {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    object-fit: contain; 
+    margin-right: 15px;
+    border: 1px solid var(--border-light);
+    padding: 2px;
+}
+
+.cert-details {
+    flex-grow: 1;
+}
+
+.cert-details * {
+    list-style: none;
+    padding-left: 0;
+}
+
 
 /* ========================================= */
 /* --- VISUAL FIX: HTML Tag Styling (Used by JS) --- */
@@ -341,7 +399,7 @@ textarea {
     padding: 15px;
     border: 2px dashed #ff9800; /* Orange Accent */
     border-radius: 8px;
-    background-color: var(--main-bg); /* Soft background for suggestion box */
+    background-color: var(--main-bg); 
     color: var(--text-color);
 }
 

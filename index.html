@@ -9,10 +9,37 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+        // --- THEME TOGGLE LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.getElementById('theme-toggle');
+            // Check for saved preference, default to 'light'
+            const currentTheme = localStorage.getItem('theme') || 'light'; 
+
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            toggleButton.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+
+            toggleButton.addEventListener('click', () => {
+                let theme = document.documentElement.getAttribute('data-theme');
+                if (theme === 'dark') {
+                    theme = 'light';
+                    toggleButton.textContent = '🌙';
+                } else {
+                    theme = 'dark';
+                    toggleButton.textContent = '☀️';
+                }
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme); // Saves preference
+            });
+        });
+    </script>
   </head>
   <body>
     <header class="top-bar">
       <h1>AI Resume Builder</h1>
+        <button id="theme-toggle" aria-label="Toggle Dark/Light Mode">
+            🌙
+        </button>
       <div class="hackathon-info">Coderush 11.0 Project</div>
     </header>
 
@@ -39,14 +66,17 @@
               placeholder="Phone Number / Address"
             />
 
-            <!-- NEW IMAGE INPUT -->
+            <input 
+                type="text" 
+                id="target-job" 
+                placeholder="Target Job Title (e.g., Entry-Level Developer)" 
+                required 
+            />
             <label for="profile-pic-file" class="file-label">
                 Upload Profile Picture (Optional)
             </label>
             <input type="file" id="profile-pic-file" accept="image/*">
-            <!-- END NEW IMAGE INPUT -->
-
-            <textarea
+                        <textarea
               id="summary"
               placeholder="Professional Summary/Objective (2-3 lines for the AI to start with)"
             ></textarea>
@@ -102,7 +132,25 @@
             </button>
           </section>
 
-          <section class="form-group-card">
+            <section class="form-group-card" id="certificates-section">
+                <h3>Certifications & Awards</h3>
+                <div class="certificates-block input-block">
+                    <input type="text" class="cert-name" placeholder="Certificate Name (e.g., Coursera JS Basics)">
+                    <input type="text" class="cert-issuer" placeholder="Issuing Organization (e.g., Google, Coursera)">
+                    <div class="input-inline">
+                        <input type="text" class="cert-date" placeholder="Issue Date/Year">
+                        <input type="file" class="cert-file" accept="image/*">
+                    </div>
+                </div>
+                <button
+                    type="button"
+                    class="add-btn"
+                    onclick="addBlock('certificates')"
+                >
+                    + Add More Certificates
+                </button>
+            </section>
+                      <section class="form-group-card">
             <h3>Core Skills</h3>
             <textarea
               id="skills"
@@ -114,9 +162,7 @@
             <span class="submit-icon">✨</span> Generate AI Resume & Suggestions
           </button>
         </form>
-      </div>
-
-      <div class="output-panel">
+      </div>       <div class="output-panel">
         <h2 class="panel-title">2. AI Resume Preview & Suggestions</h2>
         <p class="panel-subtitle">
           Your final resume and AI-powered suggestions will appear here.
@@ -140,15 +186,10 @@
           </p>
         </div>
         
-        <!-- PDF DOWNLOAD BUTTON (Now functions as Print-to-PDF) -->
         <button id="print-resume-btn" class="submit-btn" onclick="window.print()" style="background-color: #FFA000; margin-top: 20px;">
             <span class="submit-icon">🖨️</span> Print/Save Resume (PDF)
         </button>
-        <!-- END PDF DOWNLOAD BUTTON -->
-      </div>
-    </div>
-    
-    <script>
+              </div>     </div> <script>
         // --- 1. Dynamic Block Addition Function (Corrected) ---
         function addBlock(type) {
             const container = document.getElementById(type + "-section");
@@ -174,6 +215,16 @@
                     </div>
                     <textarea class="responsibilities" placeholder="Key responsibilities and achievements (short points)."></textarea>
                 `;
+            } else if (type === "certificates") {
+                 const blockCount = document.querySelectorAll(".certificates-block").length;
+                 newBlock.innerHTML = `
+                     <input type="text" class="cert-name" placeholder="Certificate Name (e.g., Coursera JS Basics)">
+                     <input type="text" class="cert-issuer" placeholder="Issuing Organization (e.g., Google, Coursera)">
+                     <div class="input-inline">
+                        <input type="text" class="cert-date" placeholder="Issue Date/Year">
+                        <input type="file" class="cert-file" accept="image/*">
+                    </div>
+                 `;
             }
             container.insertBefore(newBlock, container.querySelector(".add-btn"));
         }
@@ -187,12 +238,11 @@
                 const form = e.target;
                 const data = {};
                 
-                // --- IMAGE HANDLING LOGIC ---
+                // --- IMAGE HANDLING: PROFILE PICTURE ---
                 const imageFile = form.querySelector("#profile-pic-file").files[0];
                 let imageBase64 = '';
 
                 if (imageFile) {
-                    // This is an asynchronous operation, blocking execution until the file is read
                     await new Promise((resolve) => {
                         const reader = new FileReader();
                         reader.onload = (event) => {
@@ -203,13 +253,14 @@
                     });
                 }
                 data.profileImage = imageBase64;
-                // --- END IMAGE HANDLING ---
+                // --- END IMAGE HANDLING: PROFILE PICTURE ---
 
 
                 // A. Collect Static Fields
                 data.name = form.querySelector("#name").value;
                 data.email = form.querySelector("#email").value;
                 data.phone = form.querySelector("#phone").value;
+                data.targetJob = form.querySelector("#target-job").value; // COLLECT TARGET JOB
                 data.summary = form.querySelector("#summary").value;
                 data.skills = form.querySelector("#skills").value;
 
@@ -238,6 +289,35 @@
                             block.querySelector(".responsibilities")?.value || "",
                     });
                 });
+                
+                // D. Collect Dynamic Certificates Blocks (Includes Base64 Conversion)
+                data.certificates = [];
+                const certBlocks = document.querySelectorAll(".certificates-block");
+
+                for (const block of certBlocks) {
+                    const imageInput = block.querySelector(".cert-file");
+                    const imageFile = imageInput?.files[0];
+                    let certImageBase64 = '';
+
+                    if (imageFile) {
+                        await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                                certImageBase64 = event.target.result;
+                                resolve();
+                            };
+                            reader.readAsDataURL(imageFile);
+                        });
+                    }
+
+                    data.certificates.push({
+                        name: block.querySelector(".cert-name")?.value || "",
+                        issuer: block.querySelector(".cert-issuer")?.value || "",
+                        date: block.querySelector(".cert-date")?.value || "",
+                        image: certImageBase64 
+                    });
+                }
+
 
                 // --- UI State Management ---
                 const submitBtn = document.querySelector(".submit-btn");
